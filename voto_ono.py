@@ -1,3 +1,7 @@
+#тут короче используется pyqt6, но я поменял цифру на 5
+
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QRadioButton, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
