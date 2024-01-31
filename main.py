@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QVBoxLayou
 from PyQt5.QtWidgets import QPushButton, QCheckBox, QStackedWidget, QGridLayout, QDialog, QRadioButton
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
+from math import floor
 
 
 class BlankField(Exception):
@@ -262,24 +263,63 @@ class BodyFatDialog(QDialog):
         self.setWindowTitle('Измерение процента жира')
         self.setGeometry(600, 300, 400, 200)
 
-        Layout = QVBoxLayout(self)
-        self.BodyFatLabel = QLabel('Данные пользователя:')
-        self.BodyFatLabel.setAlignment(Qt.AlignCenter)
-        Layout.addWidget(self.BodyFatLabel)
+        layout = QVBoxLayout(self)
+        self.body_fat_label = QLabel('Данные пользователя:')
+        self.body_fat_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.body_fat_label)
 
         info_label = QLabel(f"Возраст: {self.Db['Age']} лет\nРост: {self.Db['Height']} м\nВес: {self.Db['Weight']} кг")
         info_label.setAlignment(Qt.AlignCenter)
-        Layout.addWidget(info_label)
+        layout.addWidget(info_label)
 
-    def CheckBF(self, lower, upper): # Проверка уровня процента жира и отображение результата
-        if lower <= self.BodyFat <= upper:
-            self.BodyFatLabel2.setText(f"{self.BodyFat}% (Норма)")
-        elif self.BodyFat < lower:
-            self.BodyFatLabel2.setText(f"{self.BodyFat}% (Ниже нормы)")
-        elif self.BodyFat > upper:
-            self.BodyFatLabel2.setText(f"{self.BodyFat}% (Выше нормы)")
-        
-        
+        self.calculate_and_display_info()
+
+    def calculate_and_display_info(self):
+        gender = self.Db['Sex']
+        weight = self.Db['Weight']
+        height = self.Db['Height']
+        age = self.Db['Age']
+        bulking = self.Db['Bulking']
+        losing = self.Db['Losing']
+        healthing = self.Db['Healthing']
+
+        if bulking or losing or healthing:
+            calories = self.calculate_calories(gender, weight, height, age, bulking, losing, healthing)
+            rounded_calories = int(calories)
+            proteins = int(rounded_calories * 0.35 / 4)
+            fats = int(rounded_calories * 0.4 / 9)
+            carbs = int(rounded_calories * 0.25 / 4)
+
+            bulking_info_text = f"{'Для набора мышечной массы' if bulking else 'Для похудения' if losing else 'Для укрепления здоровья'}:\n" \
+                                f"Калории: {rounded_calories}\n" \
+                                f"Белки: {proteins} г\n" \
+                                f"Жиры: {fats} г\n" \
+                                f"Углеводы: {carbs} г"
+
+            bulking_info_label = QLabel(bulking_info_text)
+            bulking_info_label.setAlignment(Qt.AlignCenter)
+            self.layout().addWidget(bulking_info_label)
+
+    def calculate_calories(self, gender, weight, height, age, bulking, losing, healthing):
+        if bulking:
+            if gender == 'Мужской':
+                return round((10 * weight) + (6.25 * height) - (5 * age) + 5)
+            elif gender == 'Женский':
+                return round((10 * weight) + (6.25 * height) - (5 * age) - 161)
+        elif losing:
+            if gender == 'Мужской':
+                return round((88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)) * 0.8)
+            elif gender == 'Женский':
+                return round((447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age)) * 0.8)
+        elif healthing:
+            if gender == 'Мужской':
+                return round(447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * age))
+            elif gender == 'Женский':
+                return round(88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age))
+        else:
+            return 0
+
+
 class WorkoutPlanWidget(QWidget): # Инициализация окна с тренировочным планом
     def __init__(self, WorkoutPlan):
         super().__init__()
