@@ -48,7 +48,7 @@ class GymHelper(QMainWindow):
         self.Page2UI(Page2)
 
         self.ButtonToPage1 = QPushButton("Страница своих данных", self)
-        self.ButtonToPage2 = QPushButton("Страница помощи", self)
+        self.ButtonToPage2 = QPushButton("Страница рассчетов", self)
 
         self.ButtonToPage1.clicked.connect(lambda: self.StackedWidg.setCurrentIndex(0))
         self.ButtonToPage2.clicked.connect(self.page2)
