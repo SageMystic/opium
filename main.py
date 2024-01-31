@@ -65,7 +65,7 @@ class GymHelper(QMainWindow):
         MainLayout.addWidget(WelcomeLabel1)
         MainLayout.addWidget(WelcomeLabel2)
         AgeHeightWeightlayout = QHBoxLayout()
-        page.heightl = QLabel("Рост (м):")
+        page.heightl = QLabel("Рост (см):")
         page.weightl = QLabel("Вес (кг):")
         page.agel = QLabel("Возраст:")
         self.heightinp = QLineEdit()
@@ -212,7 +212,7 @@ class GymHelper(QMainWindow):
 
         MainLayout.addWidget(self.StartWorkoutButton, 4, 0, 1, 2)
         
-        self.MeasureBodyFatButton = QPushButton('Измерить процент жира', self)
+        self.MeasureBodyFatButton = QPushButton('Узнать оптимальное КБЖУ', self)
         self.MeasureBodyFatButton.clicked.connect(self.BodyFatMeasure)
         MainLayout.addWidget(self.MeasureBodyFatButton, 5, 0, 1, 2)
 
@@ -260,7 +260,7 @@ class BodyFatDialog(QDialog):
     def __init__(self, database):
         super().__init__()
         self.Db = database
-        self.setWindowTitle('Измерение процента жира')
+        self.setWindowTitle('Оптимальное КБЖУ')
         self.setGeometry(600, 300, 400, 200)
 
         layout = QVBoxLayout(self)
@@ -268,7 +268,7 @@ class BodyFatDialog(QDialog):
         self.body_fat_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.body_fat_label)
 
-        info_label = QLabel(f"Возраст: {self.Db['Age']} лет\nРост: {self.Db['Height']} м\nВес: {self.Db['Weight']} кг")
+        info_label = QLabel(f"Возраст: {int(self.Db['Age'])} лет\nРост: {int(self.Db['Height'])} см\nВес: {int(self.Db['Weight'])} кг")
         info_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(info_label)
 
