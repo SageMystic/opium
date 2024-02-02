@@ -60,7 +60,7 @@ class GymHelper(QMainWindow):
         MainLayout = QVBoxLayout() # Инициализация интерфейса первой страницы (ввод данных)
         page.setLayout(MainLayout)
 
-        WelcomeLabel1 = QLabel("Привет! Если тебе понадобилась помощь в прокачке тела, то смело используй эту программу.")
+        WelcomeLabel1 = QLabel("Привет! Если тебе понадобилась помощь в тренировках, то смело используй эту программу.")
         WelcomeLabel2 = QLabel("Для начала заполни данные ниже:")
         MainLayout.addWidget(WelcomeLabel1)
         MainLayout.addWidget(WelcomeLabel2)
