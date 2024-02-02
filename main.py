@@ -261,7 +261,7 @@ class BodyFatDialog(QDialog):
         super().__init__()
         self.Db = database
         self.setWindowTitle('Оптимальное КБЖУ')
-        self.setGeometry(600, 300, 400, 200)
+        self.setGeometry(600, 300, 600, 400)
 
         layout = QVBoxLayout(self)
         self.body_fat_label = QLabel('Данные пользователя:')
