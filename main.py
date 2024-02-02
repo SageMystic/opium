@@ -333,7 +333,7 @@ class WorkoutPlanWidget(QWidget): # Инициализация окна с тр�
         for col in (self.WorkoutPlan.keys()):
             DayLabel = QLabel(col)
             Font = QFont()
-            Font.setPointSize(20)
+            Font.setPointSize(10)
             DayLabel.setFont(Font)
             self.ExerciseText = ''
             for i in self.WorkoutPlan[col]:
