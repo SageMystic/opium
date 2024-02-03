@@ -227,10 +227,6 @@ class GymHelper(QMainWindow):
             self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
             self.WorkoutPlanWidg.show()
             
-       def ShowWorkoutPlan(self, WorkoutPlan): # Отображение окна с тренировочным планом
-            self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
-            self.WorkoutPlanWidg.show()
-            
     def StartWorkout(self):
         SelectedDays = [checkbox.text() for checkbox in self.DaysCheckboxes if checkbox.isChecked()]
 
@@ -277,10 +273,12 @@ class BodyFatDialog(QDialog):
         layout = QVBoxLayout(self)
         self.body_fat_label = QLabel('Данные пользователя:')
         self.body_fat_label.setAlignment(Qt.AlignCenter)
+        self.body_fat_label.setFont(QFont("Arial", 14))  # Increase font size
         layout.addWidget(self.body_fat_label)
 
         info_label = QLabel(f"Возраст: {int(self.Db['Age'])} лет\nРост: {int(self.Db['Height'])} см\nВес: {int(self.Db['Weight'])} кг")
         info_label.setAlignment(Qt.AlignCenter)
+        info_label.setFont(QFont("Arial", 14))  # Increase font size
         layout.addWidget(info_label)
 
         self.calculate_and_display_info()
@@ -309,6 +307,8 @@ class BodyFatDialog(QDialog):
 
             bulking_info_label = QLabel(bulking_info_text)
             bulking_info_label.setAlignment(Qt.AlignCenter)
+            bulking_info_label.setFont(QFont("Arial", 14))  # Increase font size
+
             self.layout().addWidget(bulking_info_label)
 
     def calculate_calories(self, gender, weight, height, age, bulking, losing, healthing):
