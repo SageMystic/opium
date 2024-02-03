@@ -83,6 +83,7 @@ class GymHelper(QMainWindow):
         page.SexLabel = QLabel("Введите пол:")
         self.MaleRadio = QRadioButton("Мужской")
         self.MaleRadio.clicked.connect(self.UpdateSex)
+        self.body_fat_dialog = None
         self.FemaleRadio = QRadioButton("Женский")
         self.FemaleRadio.clicked.connect(self.UpdateSex)
         self.SexGroup.addButton(self.MaleRadio)
@@ -232,9 +233,9 @@ class GymHelper(QMainWindow):
         self.MeasureBodyFatButton.clicked.connect(self.BodyFatMeasure)
         MainLayout.addWidget(self.MeasureBodyFatButton, 5, 0, 1, 2)
 
-    def BodyFatMeasure(self):
-        dialog = BodyFatDialog(self.Database)
-        dialog.exec_()
+    def BodyFatMeasure(self): 
+        self.body_fat_dialog = BodyFatDialog(self.Database)
+        self.body_fat_dialog.show()
 
     def ShowWorkoutPlan(self, WorkoutPlan):
         self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
@@ -277,7 +278,7 @@ class GymHelper(QMainWindow):
 
 
 
-class BodyFatDialog(QDialog):
+class BodyFatDialog(QWidget):
     def __init__(self, database):
         super().__init__()
         self.Db = database
@@ -285,14 +286,15 @@ class BodyFatDialog(QDialog):
         self.setGeometry(600, 300, 600, 400)
 
         layout = QVBoxLayout(self)
+        
         self.body_fat_label = QLabel('Данные пользователя:')
         self.body_fat_label.setAlignment(Qt.AlignCenter)
-        self.body_fat_label.setFont(QFont("Arial", 14))  # Increase font size
+        self.body_fat_label.setFont(QFont("Arial", 14))
         layout.addWidget(self.body_fat_label)
 
         info_label = QLabel(f"Возраст: {int(self.Db['Age'])} лет\nРост: {int(self.Db['Height'])} см\nВес: {int(self.Db['Weight'])} кг")
         info_label.setAlignment(Qt.AlignCenter)
-        info_label.setFont(QFont("Arial", 14))  # Increase font size
+        info_label.setFont(QFont("Arial", 14))
         layout.addWidget(info_label)
 
         self.calculate_and_display_info()
@@ -321,7 +323,7 @@ class BodyFatDialog(QDialog):
 
             bulking_info_label = QLabel(bulking_info_text)
             bulking_info_label.setAlignment(Qt.AlignCenter)
-            bulking_info_label.setFont(QFont("Arial", 14))  # Increase font size
+            bulking_info_label.setFont(QFont("Arial", 14))
 
             self.layout().addWidget(bulking_info_label)
 
