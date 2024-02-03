@@ -15,28 +15,28 @@ class BlankField(Exception):
         super().__init__(self.message)
 
 
+
 class GymHelper(QMainWindow):
-    def __init__(self): # Инициализация основного окна
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("Gym Helper")
-        self.setGeometry(400, 50, 600, 200)  # Корректируем размер окна
+        self.setGeometry(400, 50, 600, 200)
         self.initUI()
         self.Database = {'Age': None, 'Height': None, 'Weight': None, 'Bulking': False,
                          'Losing': False, 'Healthing': False, 'Sex': False}
         self.ExerciseDatabase = {
-            'Bulking': [('Присед со штангой', 2), ('Сгибание/разгибание ног на трнеажёре', 2), ('Тяга верхнего блока', 3), ('Горизонтальная тяга блока', 3), ('Поднятие штанги в наклоне', 3),
-                     ('Поднятие штанги на бицепс', 2), ('Молотки с гантелями', 2), ('Поднятие гантели на бицепс со скручиванием', 2),
-                     ('Опускание туловища на брусьях', 3), ('Разгибание верхнего блока с канатом', 3), ('Жим лёжа', 3), ('Жим гантелей лёжа', 3), ('Махи гантелей', 2), ('Разведение рук', 2)],
-            'Losing': [('Бег на дорожке', 0), ('Велоупражнения', 0), ('Бёрпи', 1), ('Выпрыгивания с упора сидя', 1), ('Альпинист', 1), ('Бег на месте', 1)],
-            'Healthing': [('Растяжка', -1), ('Вис на турнике', -1), ('Ходьба по лесу', 0), ('Подъём коленей', 1)]}
-        self.DurationDatabase = {-1: ['1-2 минуты', '2-3 минуты', '30 секунд'], 0: ['1 час', '2 часа', 'Полчаса'], 1: ['10-15 раз', '20-25 раз', '5 раз'], 
+            'Bulking': [('Присед со штангой', 2), ('Сгибание/разгибание ног на тренажере', 2), ('Тяга верхнего блока', 3)],
+            'Losing': [('Бег на дорожке', 0), ('Велоупражнения', 0), ('Бёрпи', 1)],
+            'Healthing': [('Растяжка', -1), ('Вис на турнике', -1), ('Ходьба по лесу', 0)]
+        }
+        self.DurationDatabase = {-1: ['1-2 минуты', '2-3 минуты', '30 секунд'], 0: ['1 час', '2 часа', 'Полчаса'],
+                                 1: ['10-15 раз', '20-25 раз', '5 раз'],
                                  2: ['6-8 раз', '8-10 раз', '4-6 раз'], 3: ['4-6 раз', '6-8 раз', '2-4 раз']}
 
     def initUI(self):
-        CentralWidg = QWidget()  # Создаём главное окно
-        self.setCentralWidget(CentralWidg)  
-
-        self.MainLayout = QVBoxLayout(CentralWidg)  # Создаём основной шаблон для виджетов на главном окно
+        CentralWidg = QWidget()
+        self.setCentralWidget(CentralWidg)
+        self.MainLayout = QVBoxLayout(CentralWidg)
 
         self.StackedWidg = QStackedWidget(self)
         self.MainLayout.addWidget(self.StackedWidg)
@@ -49,30 +49,26 @@ class GymHelper(QMainWindow):
         self.Page1UI(Page1)
         self.Page2UI(Page2)
 
-        self.ButtonToPage1 = QPushButton("Страница своих данных", self)
-        self.ButtonToPage2 = QPushButton("Страница рассчетов", self)
+        # Add the "Перейти к расчетам" button
 
-        self.ButtonToPage1.clicked.connect(lambda: self.StackedWidg.setCurrentIndex(0))
-        self.ButtonToPage2.clicked.connect(self.page2)
-
-        self.MainLayout.addWidget(self.ButtonToPage1)
-        self.MainLayout.addWidget(self.ButtonToPage2)
 
     def Page1UI(self, page):
-        MainLayout = QVBoxLayout() # Инициализация интерфейса первой страницы (ввод данных)
+        MainLayout = QVBoxLayout()
         page.setLayout(MainLayout)
 
         WelcomeLabel1 = QLabel("Привет! Если тебе понадобилась помощь в тренировках, то смело используй эту программу.")
         WelcomeLabel2 = QLabel("Для начала заполни данные ниже:")
         MainLayout.addWidget(WelcomeLabel1)
         MainLayout.addWidget(WelcomeLabel2)
+
+        self.heightinp = QLineEdit()
+        self.weightinp = QLineEdit()
+        self.ageinp = QLineEdit()
+
         AgeHeightWeightlayout = QHBoxLayout()
         page.heightl = QLabel("Рост (см):")
         page.weightl = QLabel("Вес (кг):")
         page.agel = QLabel("Возраст:")
-        self.heightinp = QLineEdit()
-        self.weightinp = QLineEdit()
-        self.ageinp = QLineEdit()
 
         AgeHeightWeightlayout.addWidget(page.heightl)
         AgeHeightWeightlayout.addWidget(self.heightinp)
@@ -82,21 +78,6 @@ class GymHelper(QMainWindow):
         AgeHeightWeightlayout.addWidget(self.ageinp)
         MainLayout.addLayout(AgeHeightWeightlayout)
 
-        MenuBar = self.menuBar()
-        HelpBar = MenuBar.addMenu('Меню')
-        LinksAc = QAction('Источники', self)
-        LinksAc.triggered.connect(self.ShowLinks)
-        HelpBar.addAction(LinksAc)
-        self.LinkWind = NotImplemented
-
-        Page1Layout = QVBoxLayout()
-
-        page.GoalLabel = QLabel("Выбери цели:")
-        page.Checkboxes = []
-        self.BulkBox = QRadioButton("Набрать мышечную массу")
-        self.SkinnyBox = QRadioButton("Похудеть")
-        self.HealthBox = QRadioButton("Укрепить здоровье")
-        self.SelectedGoals = QLabel("Выбранна цель:")
         SexLayout = QHBoxLayout()
         self.SexGroup = QButtonGroup()
         page.SexLabel = QLabel("Введите пол:")
@@ -110,30 +91,41 @@ class GymHelper(QMainWindow):
         SexLayout.addWidget(self.MaleRadio)
         SexLayout.addWidget(self.FemaleRadio)
         MainLayout.addLayout(SexLayout)
-        Page1Layout.addWidget(page.GoalLabel)
-        Page1Layout.addWidget(self.BulkBox)
-        Page1Layout.addWidget(self.SkinnyBox)
-        Page1Layout.addWidget(self.HealthBox)
-        Page1Layout.addWidget(self.SelectedGoals)
+
+        Page1Layout = QVBoxLayout()
+        page.GoalLabel = QLabel("Выбери цели:")
+        self.BulkBox = QRadioButton("Набрать мышечную массу")
+        self.SkinnyBox = QRadioButton("Похудеть")
+        self.HealthBox = QRadioButton("Укрепить здоровье")
+        self.SelectedGoals = QLabel("Выбрана цель:")
         stateChanged = QButtonGroup(self)
         stateChanged.addButton(self.BulkBox)
         stateChanged.addButton(self.SkinnyBox)
         stateChanged.addButton(self.HealthBox)
 
+        self.BulkBox.clicked.connect(self.UpdateGoals)
+        self.SkinnyBox.clicked.connect(self.UpdateGoals)
+        self.HealthBox.clicked.connect(self.UpdateGoals)
+
+        Page1Layout.addWidget(page.GoalLabel)
+        Page1Layout.addWidget(self.BulkBox)
+        Page1Layout.addWidget(self.SkinnyBox)
+        Page1Layout.addWidget(self.HealthBox)
+        Page1Layout.addWidget(self.SelectedGoals)
         MainLayout.addLayout(Page1Layout)
+
         self.FillInfoButton = QPushButton('Ввести данные')
         MainLayout.addWidget(self.FillInfoButton)
         self.FillInfoButton.clicked.connect(self.FillInfo)
         page.setLayout(Page1Layout)
-        
+
         self.statusBar().showMessage(f'Перед началом введи данные о себе')
 
-        
-    def UpdateSex(self): # Обновление информации о поле в базе данных
+    def UpdateSex(self):
         if self.SexGroup.checkedButton() is not None:
             self.Database['Sex'] = 'Мужской' if self.SexGroup.checkedButton() == self.MaleRadio else 'Женский'
-            
-    def UpdateGoals(self): # Обновление информации о целях в базе данных
+
+    def UpdateGoals(self):
         Selected = []
 
         if self.BulkBox.isChecked():
@@ -145,9 +137,9 @@ class GymHelper(QMainWindow):
         if self.HealthBox.isChecked():
             Selected.append("Укрепить здоровье")
 
-        self.SelectedGoals.setText("Выбранна цель: " + Selected)
+        self.SelectedGoals.setText("Выбрана цель: " + ', '.join(Selected))
 
-    def FillInfo(self): # Заполнение базы данных информацией о пользователе
+    def FillInfo(self):
         try:
             EmptyBoxChecker = 0
             if self.ageinp.text() == '' or self.heightinp.text() == '' or self.weightinp.text() == '':
@@ -171,26 +163,48 @@ class GymHelper(QMainWindow):
                     self.Database['Healthing'] = True
                 else:
                     EmptyBoxChecker += 1
-                if self.Database['Sex'] == False:
+                if self.Database['Sex'] is False:
                     raise BlankField
                 if EmptyBoxChecker == 3:
                     raise BlankField
+
+                self.StackedWidg.setCurrentIndex(1)
+                self.page2()
+
                 self.statusBar().clearMessage()
         except BlankField as B:
             self.statusBar().showMessage(f'Ошибка! {B}')
         except ValueError as ve:
             self.statusBar().showMessage(f'Ошибка! {ve}')
 
-    def ShowLinks(self): # Отображение окна с ссылками на источники
+    def UpdateSex(self):
+        if self.SexGroup.checkedButton() is not None:
+            self.Database['Sex'] = 'Мужской' if self.SexGroup.checkedButton() == self.MaleRadio else 'Женский'
+
+    def UpdateGoals(self):
+        Selected = []
+
+        if self.BulkBox.isChecked():
+            Selected.append("Набрать мышечную массу")
+
+        if self.SkinnyBox.isChecked():
+            Selected.append("Похудеть")
+
+        if self.HealthBox.isChecked():
+            Selected.append("Укрепить здоровье")
+
+        self.SelectedGoals.setText("Выбрана цель: " + ', '.join(Selected))
+
+    def ShowLinks(self):
         self.LinkWind = LinksWidget()
         self.LinkWind.show()
 
-    def page2(self): # Переключение на вторую страницу с основным функционалом
+    def page2(self):
         StatusMessage = self.statusBar().currentMessage()
         if not StatusMessage:
             self.StackedWidg.setCurrentIndex(1)
 
-    def Page2UI(self, page):  # Инициализация интерфейса второй страницы 
+    def Page2UI(self, page):
         MainLayout = QGridLayout()
         page.setLayout(MainLayout)
         page.MainInfoButton = QPushButton('Основная информация')
@@ -213,20 +227,19 @@ class GymHelper(QMainWindow):
         self.StartWorkoutButton.clicked.connect(self.StartWorkout)
 
         MainLayout.addWidget(self.StartWorkoutButton, 4, 0, 1, 2)
-        
+
         self.MeasureBodyFatButton = QPushButton('Узнать оптимальное КБЖУ', self)
         self.MeasureBodyFatButton.clicked.connect(self.BodyFatMeasure)
         MainLayout.addWidget(self.MeasureBodyFatButton, 5, 0, 1, 2)
 
-    def BodyFatMeasure(self): # Измерение процента жира и отображение результата
+    def BodyFatMeasure(self):
         dialog = BodyFatDialog(self.Database)
         dialog.exec_()
 
-    
-    def ShowWorkoutPlan(self, WorkoutPlan): # Отображение окна с тренировочным планом
-            self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
-            self.WorkoutPlanWidg.show()
-            
+    def ShowWorkoutPlan(self, WorkoutPlan):
+        self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
+        self.WorkoutPlanWidg.show()
+
     def StartWorkout(self):
         SelectedDays = [checkbox.text() for checkbox in self.DaysCheckboxes if checkbox.isChecked()]
 
@@ -261,6 +274,7 @@ class GymHelper(QMainWindow):
     def Welcome(self):
         self.WelcomeWidg = WelcomeWidg(self.Database)
         self.WelcomeWidg.show()
+
 
 
 class BodyFatDialog(QDialog):
