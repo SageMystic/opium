@@ -415,8 +415,8 @@ class LinksWidget(QWidget): # Инициализация окна со ссыл�
         self.setGeometry(1000, 50, 300, 700)
         self.Layout = QVBoxLayout()
         self.setLayout(self.Layout)
-        self.LinkDatabase = [('https://www.medicalnewstoday.com/articles/hiit-workouts-weight-loss#definition', 'Кардиотренировки'),
-                             ('https://kurl.ru/hCtjq', 'Советы по питанию'), ('https://kurl.ru/BJvaY', 'Влияние сна на мышцы'),
+        self.LinkDatabase = [('https://lasalute.ru/blog/uprazhneniya/kardiotrenirovka/', 'Кардиотренировки'),
+                             ('https://www.sports.ru/health/blogs/2820510.html', 'Советы по питанию'), ('https://kurl.ru/BJvaY', 'Влияние сна на мышцы'),
                              ('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763382/', 'Сравнение различных диет'),
                              ('https://kurl.ru/cwYap', 'Мифы о жиросжигании'), ('https://kurl.ru/rHvRk', 'Спортивные добавки и всё о них'),
                              ('https://kurl.ru/QGhJj', 'Влияние стресса на здоровье'), ('https://pubmed.ncbi.nlm.nih.gov/30003901/', 'Всё о влиянии тренировок на потерю веса')]
