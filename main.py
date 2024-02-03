@@ -2,6 +2,8 @@ import sys
 from random import shuffle
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QMainWindow, QAction, QButtonGroup
 from PyQt5.QtWidgets import QPushButton, QCheckBox, QStackedWidget, QGridLayout, QDialog, QRadioButton
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 from math import floor
@@ -320,32 +322,38 @@ class BodyFatDialog(QDialog):
             return 0
 
 
-class WorkoutPlanWidget(QWidget): # Инициализация окна с тренировочным планом
+class WorkoutPlanWidget(QWidget):
     def __init__(self, WorkoutPlan):
         super().__init__()
         self.setWindowTitle("Тренировочный план")
         self.setGeometry(300, 300, 700, 500)
-        MainLayout = QVBoxLayout()
-        self.setLayout(MainLayout)
-        self.WorkoutPlan = WorkoutPlan
-        DaysLayout = QGridLayout()
 
-        for col in (self.WorkoutPlan.keys()):
-            DayLabel = QLabel(col)
-            Font = QFont()
-            Font.setPointSize(10)
-            DayLabel.setFont(Font)
-            self.ExerciseText = ''
-            for i in self.WorkoutPlan[col]:
-                self.ExerciseText  = self.ExerciseText + i[0] + '\t' + i[1] + '\n'
-            ExerciseLabel = QLabel(self.ExerciseText)
-            Font = QFont()
-            Font.setPointSize(12)
-            ExerciseLabel.setFont(Font)
-            Column = DaysLayout.columnCount()
-            DaysLayout.addWidget(DayLabel, 0, Column)
-            DaysLayout.addWidget(ExerciseLabel, 1, Column)
-        MainLayout.addLayout(DaysLayout)
+        layout = QVBoxLayout(self)
+
+        font = QFont()
+        font.setPointSize(12)  # Увеличиваем размер шрифта на 5 пунктов
+
+        bold_font = QFont()
+        bold_font.setBold(True)  # Делаем шрифт жирным
+        bold_font.setPointSize(12)  # Устанавливаем размер шрифта для жирных линий
+
+        for day, exercises in WorkoutPlan.items():
+            day_label = QLabel(f"<b>{day}</b>")
+            day_label.setFont(font)
+            exercises_text = ', '.join([f"{name} ({duration})" for name, duration in exercises])
+            
+            exercises_label = QLabel(exercises_text)
+            exercises_label.setFont(font)
+            exercises_label.setWordWrap(True)  # Устанавливаем перенос по словам
+
+            layout.addWidget(day_label)
+            layout.addWidget(exercises_label)
+
+            # Добавляем разделительную линию
+            line = QLabel("<hr>")
+            line.setFont(bold_font)  # Устанавливаем жирный шрифт для линии
+            layout.addWidget(line)
+
 
 class WelcomeWidg(QWidget): # Инициализация окна с кратким экскурсом
     def __init__(self, db):
