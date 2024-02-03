@@ -227,8 +227,17 @@ class GymHelper(QMainWindow):
             self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
             self.WorkoutPlanWidg.show()
             
+       def ShowWorkoutPlan(self, WorkoutPlan): # Отображение окна с тренировочным планом
+            self.WorkoutPlanWidg = WorkoutPlanWidget(WorkoutPlan)
+            self.WorkoutPlanWidg.show()
+            
     def StartWorkout(self):
         SelectedDays = [checkbox.text() for checkbox in self.DaysCheckboxes if checkbox.isChecked()]
+
+        if not SelectedDays:
+            self.statusBar().showMessage("Выберите хотя бы один день недели")
+            return
+
         WorkoutPlan = {}
         for i in SelectedDays:
             WorkoutPlan[i] = []
