@@ -66,4 +66,27 @@ if __name__ == '__main__':
     widget = MyWidget()
     sys.exit(app.exec_())
 
+import csv
+import json
+
+def find_unusual_houses(file_path):
+    with open(file_path, 'r', newline='') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            inside = int(row['inside'])
+            outside = int(row['outside'])
+            if inside != outside:
+                difference = abs(inside - outside)
+                yield {'address': row['address'], 'difference': difference}
+
+def save_unusual_houses(unusual_houses, file_path):
+    with open(file_path, 'w', newline='') as file:
+        json.dump(list(unusual_houses), file, ensure_ascii=False, indent=4)
+
+def main():
+    file_path = 'houses.csv'
+    save_unusual_houses(find_unusual_houses(file_path), 'unusual.json')
+
+if __name__ == '__main__':
+    main()
 
