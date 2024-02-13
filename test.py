@@ -67,34 +67,3 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 
 
-
-
-
-
-
-import csv
-import json
-
-def find_unusual_houses(file_path):
-    unusual_houses = []
-    with open(file_path, 'r', newline='') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            inside = int(row['inside'])
-            outside = int(row['outside'])
-            if inside != outside:
-                difference = abs(inside - outside)
-                unusual_houses.append({'address': row['address'], 'difference': difference})
-    return unusual_houses
-
-def save_unusual_houses(unusual_houses, file_path):
-    with open(file_path, 'w', newline='') as file:
-        json.dump(unusual_houses, file, ensure_ascii=False, indent=4)
-
-def main():
-    file_path = 'houses.csv'
-    unusual_houses = find_unusual_houses(file_path)
-    save_unusual_houses(unusual_houses, 'unusual.json')
-
-if __name__ == '__main__':
-    main()
